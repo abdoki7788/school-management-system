@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "djoser",
 
     "attendance.apps.AttendanceConfig",
+    "accounts.apps.AccountsConfig",
 ]
 
 MIDDLEWARE = [
