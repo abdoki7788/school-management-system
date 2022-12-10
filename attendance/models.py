@@ -5,8 +5,8 @@ from datetime import datetime
 
 class Attendance(models.Model):
     class_room = models.ForeignKey("Class", on_delete=models.CASCADE, related_name="attendances")
-    absents = models.ManyToManyField("Student", related_name="absent")
-    presents = models.ManyToManyField("Student", related_name="present")
+    absents = models.ManyToManyField("Student", related_name="absent", blank=True)
+    presents = models.ManyToManyField("Student", related_name="present", blank=True)
     date = models.DateField(default=datetime.now)
 
 class Student(models.Model):

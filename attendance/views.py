@@ -1,5 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import viewsets
+from rest_framework.response import Response
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from .serializers import ClassSerializer, StudentSerializer
 from .permissions import IsHeadmasterOrReadonly, IsSchoolStaffOrReadOnly
@@ -11,6 +13,15 @@ class StudentViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsSchoolStaffOrReadOnly]
     serializer_class = StudentSerializer
     queryset = Student.objects.all()
+    @action(detail=True, methods=["GET"])
+    def absents(self, request, pk):
+        student = self.get_object()
+        return Response({
+            "absents_count": student.absent.count(),
+            "absent": [i.date for i in student.absent.all()]
+
+        })
+
 
 class ClassViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsHeadmasterOrReadonly]
