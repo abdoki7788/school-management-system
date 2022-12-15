@@ -29,9 +29,15 @@ class ClassViewSet(viewsets.ModelViewSet):
     queryset = Class.objects.all()
     lookup_field = 'class_id'
 
+    @action(detail=True, methods=['GET'])
+    def attendances(self, request, class_id):
+        obj = self.get_object()
+        return Response(AttendanceSerializer(obj.attendances, many=True).data)
+
 class AttendanceViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsSchoolStaffOrReadOnly]
     queryset = Attendance.objects.all()
+
     def get_serializer_class(self):
         if self.action == 'list':
             return AttendanceListSerializer
