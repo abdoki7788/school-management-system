@@ -27,3 +27,10 @@ class AttendanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attendance
         fields = ["class_room", "absents", "presents", "date"]
+
+class AttendanceListSerializer(serializers.ModelSerializer):
+    class_room = serializers.CharField(source='class_room.class_id', read_only=True)
+    absents_count = serializers.IntegerField(source='absents.count', read_only=True)
+    class Meta:
+        model = Attendance
+        fields = ["class_room", "date", "absents_count"]

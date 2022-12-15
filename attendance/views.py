@@ -3,9 +3,9 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
-from .serializers import ClassSerializer, StudentSerializer
+from .serializers import ClassSerializer, StudentSerializer, AttendanceListSerializer, AttendanceSerializer
 from .permissions import IsHeadmasterOrReadonly, IsSchoolStaffOrReadOnly
-from .models import Class, Student
+from .models import Class, Student, Attendance
 
 User = get_user_model()
 
@@ -27,3 +27,13 @@ class ClassViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsHeadmasterOrReadonly]
     serializer_class = ClassSerializer
     queryset = Class.objects.all()
+    lookup_field = 'class_id'
+
+class AttendanceViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, IsSchoolStaffOrReadOnly]
+    queryset = Attendance.objects.all()
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return AttendanceListSerializer
+        else:
+            return AttendanceSerializer
