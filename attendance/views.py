@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -33,6 +34,12 @@ class ClassViewSet(viewsets.ModelViewSet):
     def attendances(self, request, class_id):
         obj = self.get_object()
         return Response(AttendanceSerializer(obj.attendances, many=True).data)
+
+    @action(detail=True, methods=['GET'], url_path=r'attendances/(?P<attendance_id>[a-z0-9]+)')
+    def attendance(self, request, class_id, attendance_id):
+        obj = self.get_object()
+        serialized_data = AttendanceSerializer(get_object_or_404(obj.attendances, id=attendance_id))
+        return Response(serialized_data.data)
 
 class AttendanceViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsSchoolStaffOrReadOnly]
