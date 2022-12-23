@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from accounts.models import User
+from datetime import date
 from .models import Class, Student, Attendance
 
 class StudentSerializer(serializers.ModelSerializer):
@@ -27,6 +29,14 @@ class AttendanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attendance
         fields = ["id", "class_room", "absents", "presents", "date"]
+
+class AttendanceCreateSerializer(serializers.ModelSerializer):
+    class_room = serializers.PrimaryKeyRelatedField(read_only=True)
+    date = serializers.DateField(default=date.today)
+    class Meta:
+        model = Attendance
+        fields = ['class_room', 'absents', 'presents', 'date']
+
 
 class AttendanceListSerializer(serializers.ModelSerializer):
     class_room = serializers.CharField(source='class_room.class_id', read_only=True)
