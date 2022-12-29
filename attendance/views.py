@@ -36,7 +36,9 @@ class ClassViewSet(viewsets.ModelViewSet):
         obj = self.get_object()
         print(request.method)
         if request.method == 'GET':
-            return Response(AttendanceListSerializer(obj.attendances, many=True).data)
+            return Response(AttendanceListSerializer(obj.attendances, many=True, context = {
+            'request': request,
+        }).data)
         elif request.method == 'POST':
             serialized_data = AttendanceCreateSerializer(data=request.data)
             if serialized_data.is_valid():

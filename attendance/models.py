@@ -8,6 +8,9 @@ class Attendance(models.Model):
     absents = models.ManyToManyField("Student", related_name="absent", blank=True)
     presents = models.ManyToManyField("Student", related_name="present", blank=True)
     date = models.DateField(default=datetime.now)
+
+    def detail(self):
+        return self
     class Meta:
         unique_together = ['class_room', 'date']
 
