@@ -49,10 +49,10 @@ class ClassViewSet(viewsets.ModelViewSet):
                 return Response(serialized_data.errors)
 
 
-    @action(detail=True, methods=['GET'], url_path=r'attendances/(?P<attendance_id>[a-z0-9]+)')
-    def attendance(self, request, class_id, attendance_id):
+    @action(detail=True, methods=['GET'], url_path=r'attendances/(?P<attendance_date>(\d{4}-\d{2}-\d{2}))')
+    def attendance(self, request, class_id, attendance_date):
         obj = self.get_object()
-        serialized_data = AttendanceSerializer(get_object_or_404(obj.attendances, id=attendance_id))
+        serialized_data = AttendanceSerializer(get_object_or_404(obj.attendances, date=attendance_date))
         return Response(serialized_data.data)
 
 class AttendanceViewSet(viewsets.ModelViewSet):
