@@ -1,8 +1,10 @@
+import datetime
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from django.db.utils import IntegrityError
 from rest_framework import viewsets
 from rest_framework.response import Response
+from rest_framework.exceptions import NotFound
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from .serializers import ClassSerializer, StudentSerializer, AttendanceListSerializer, AttendanceSerializer, AttendanceCreateSerializer
@@ -56,6 +58,30 @@ class ClassViewSet(viewsets.ModelViewSet):
         obj = self.get_object()
         serialized_data = AttendanceSerializer(get_object_or_404(obj.attendances, date=attendance_date))
         return Response(serialized_data.data)
+    
+    @action(detail=True, methods=['GET', 'POST'])
+    def today_attendance(self, request, class_id):
+        obj = self.get_object()
+        if request.method == 'GET':
+            try:
+                today = obj.attendances.get(date=datetime.date.today())
+                return Response(AttendanceSerializer(today).data)
+            except Attendance.DoesNotExist:
+                raise NotFound(detail='there is no attendance today for this class')
+        elif request.method == 'POST':
+            try:
+                obj.attendances.get(date=datetime.date.today())
+                return Response({'detail': 'attendance for today is already exist'}, status=400)
+            except Attendance.DoesNotExist:
+                serialized_attendance = AttendanceCreateSerializer(data=request.data)
+                if serialized_attendance.is_valid():
+                    try:
+                        serialized_attendance.save(class_room=obj, date=datetime.date.today())
+                        return Response(serialized_attendance.data, status=201)
+                    except:
+                        return Response({'detail': "attendance object cant be created"}, status=400)
+                else:
+                    return Response(serialized_attendance.errors)
 
 class AttendanceViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsSchoolStaffOrReadOnly]
