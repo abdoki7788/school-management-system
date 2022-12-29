@@ -7,16 +7,25 @@ from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
+from django_filters import rest_framework as filters
 from .serializers import ClassSerializer, StudentSerializer, AttendanceListSerializer, AttendanceSerializer, AttendanceCreateSerializer
 from .permissions import IsHeadmasterOrReadonly, IsSchoolStaffOrReadOnly
 from .models import Class, Student, Attendance
 
 User = get_user_model()
 
+
+# Students Filterset
+class StudentFilterSet(filters.FilterSet):
+    class_id = filters.CharFilter(field_name='class_room__class_id')
+
+
+
 class StudentViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsSchoolStaffOrReadOnly]
     serializer_class = StudentSerializer
     queryset = Student.objects.all()
+    filterset_class = StudentFilterSet
     @action(detail=True, methods=["GET"])
     def absents(self, request, pk):
         student = self.get_object()
