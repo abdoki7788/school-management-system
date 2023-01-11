@@ -40,6 +40,7 @@ class ClassViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsHeadmasterOrReadonly]
     serializer_class = ClassSerializer
     queryset = Class.objects.all()
+    filterset_fields = ['class_id__startswith']
     lookup_field = 'class_id'
 
     @action(detail=True, methods=['GET', 'POST'], serializer_class=AttendanceCreateSerializer)
@@ -95,6 +96,7 @@ class ClassViewSet(viewsets.ModelViewSet):
 class AttendanceViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsSchoolStaffOrReadOnly]
     queryset = Attendance.objects.all()
+    filterset_fields = ['date']
 
     def get_serializer_class(self):
         if self.action == 'list':
