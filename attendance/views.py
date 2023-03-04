@@ -45,11 +45,12 @@ class ClassViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['GET', 'POST'], serializer_class=AttendanceCreateSerializer)
     def attendances(self, request, class_id):
         obj = self.get_object()
-        print(request.method)
         if request.method == 'GET':
-            return Response(AttendanceListSerializer(obj.attendances, many=True, context = {
-            'request': request,
-        }).data)
+            return Response(
+                AttendanceListSerializer(obj.attendances, many=True, context = {
+                    'request': request,
+                }).data
+            )
         elif request.method == 'POST':
             serialized_data = AttendanceCreateSerializer(data=request.data)
             if serialized_data.is_valid():
@@ -74,13 +75,18 @@ class ClassViewSet(viewsets.ModelViewSet):
         if request.method == 'GET':
             try:
                 today = obj.attendances.get(date=datetime.date.today())
-                return Response(AttendanceSerializer(today).data)
+                return Response(
+                    AttendanceSerializer(today).data
+                )
             except Attendance.DoesNotExist:
                 raise NotFound(detail='there is no attendance today for this class')
         elif request.method == 'POST':
             try:
                 obj.attendances.get(date=datetime.date.today())
-                return Response({'detail': 'attendance for today is already exist'}, status=400)
+                return Response(
+                    {'detail': 'attendance for today is already exist'}, 
+                    status=400
+                )
             except Attendance.DoesNotExist:
                 serialized_attendance = AttendanceCreateSerializer(data=request.data)
                 if serialized_attendance.is_valid():
@@ -88,7 +94,10 @@ class ClassViewSet(viewsets.ModelViewSet):
                         serialized_attendance.save(class_room=obj, date=datetime.date.today())
                         return Response(serialized_attendance.data, status=201)
                     except:
-                        return Response({'detail': "attendance object cant be created"}, status=400)
+                        return Response(
+                            {'detail': "attendance object cant be created"}, 
+                            status=400
+                        )
                 else:
                     return Response(serialized_attendance.errors)
 
