@@ -37,7 +37,7 @@ class StudentViewSet(viewsets.ModelViewSet):
 
 
 class ClassViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, IsHeadmasterOrReadonly]
+    permission_classes = [IsAuthenticated, IsSchoolStaffOrReadOnly]
     serializer_class = ClassSerializer
     queryset = Class.objects.all()
     lookup_field = 'class_id'
