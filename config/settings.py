@@ -124,6 +124,12 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
 
+DJOSER = {
+    'PERMISSIONS': {
+        'create': 'attendance.permissions.IsHeadmaster'
+    }
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
