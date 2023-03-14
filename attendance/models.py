@@ -23,19 +23,3 @@ class Student(models.Model):
 
 class Class(models.Model):
     class_id = models.CharField(max_length=3)
-
-class ClassSchedule(models.Model):
-    name = models.CharField(max_length=100)
-    teacher = models.CharField(max_length=100)
-    days = models.CharField(max_length=100)
-    start_time = models.TimeField()
-    end_time = models.TimeField()
-
-class 
-
-class WeeklySchedule(models.Model):
-    saturday_class = models.ForeignKey(ClassSchedule, on_delete=models.CASCADE, related_name='saturday_class')
-    sundat_class = models.ForeignKey(ClassSchedule, on_delete=models.CASCADE, related_name='sundat_class')
-    monday_class = models.ForeignKey(ClassSchedule, on_delete=models.CASCADE, related_name='monday_class')
-    tuesday_class = models.ForeignKey(ClassSchedule, on_delete=models.CASCADE, related_name='tuesday_class')
-    wednesday_class = models.ForeignKey(ClassSchedule, on_delete=models.CASCADE, related_name='wednesday_class')
