@@ -5,11 +5,21 @@ from .models import Class, Student, Attendance
 
 class StudentSerializer(serializers.ModelSerializer):
     class_room = serializers.CharField(source='class_room.class_id', read_only=True)
+    full_name = serializers.CharField(read_only=True)
     class Meta:
         model = Student
         fields = ["id", "first_name", "last_name", "number", "class_room", "full_name"]
-
-
+    
+    def validate_number(self, value):
+        if len(value) != 11:
+            message = 'phone number length should be 11.'
+            raise serializers.ValidationError(message)
+        try:
+            int(value)
+        except ValueError:
+            message = 'it should be a valid number'
+            raise serializers.ValidationError(message)
+        return value
 
 class ClassStudentSerializer(serializers.ModelSerializer):
     class Meta:
