@@ -2,6 +2,8 @@ from rest_framework import serializers
 from accounts.models import User
 from datetime import date
 from .models import Class, Student, Attendance, WeeklySchedule, Lesson
+from drf_writable_nested.serializers import WritableNestedModelSerializer
+from drf_writable_nested.mixins import UniqueFieldsMixin
 
 class StudentSerializer(serializers.ModelSerializer):
     class_room = serializers.CharField(source='class_room.class_id', read_only=True)
@@ -25,16 +27,24 @@ class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
         fields = '__all__'
+    
+    def create(self, validated_data):
+        obj, _ = Lesson.objects.get_or_create(**validated_data)
+        return obj
 
-class WeeklyScheduleSerializer(serializers.ModelSerializer):
+class WeeklyScheduleSerializer(WritableNestedModelSerializer):
     satureday = LessonSerializer(many=True)
     sunday = LessonSerializer(many=True)
     monday = LessonSerializer(many=True)
     tuesday = LessonSerializer(many=True)
     wednesday = LessonSerializer(many=True)
+
     class Meta:
         model = WeeklySchedule
         fields = '__all__'
+    
+    def create(self, validated_data):
+        return super().create(validated_data)
 
 class ClassStudentSerializer(serializers.ModelSerializer):
     class Meta:
