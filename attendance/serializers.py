@@ -18,9 +18,10 @@ class ClassStudentSerializer(serializers.ModelSerializer):
 
 class ClassSerializer(serializers.ModelSerializer):
     students = ClassStudentSerializer(many=True, read_only=True)
+    students_count = serializers.IntegerField()
     class Meta:
         model = Class
-        fields = ["id", "class_id", "students"]
+        fields = ["id", "class_id", "students", "students_count"]
 
 class AttendanceSerializer(serializers.ModelSerializer):
     presents = StudentSerializer(many=True)

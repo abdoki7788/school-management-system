@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime
+from accounts.models import User
 
 # Create your models here.
 
@@ -23,3 +24,6 @@ class Student(models.Model):
 
 class Class(models.Model):
     class_id = models.CharField(max_length=3)
+
+    def students_count(self):
+        return self.students.count()
