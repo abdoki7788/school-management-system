@@ -126,7 +126,15 @@ REST_FRAMEWORK = {
 
 DJOSER = {
     'PERMISSIONS': {
-        'user_create': ['attendance.permissions.IsHeadmaster']
+        'user_create': ['attendance.permissions.IsHeadmaster'],
+        'user_delete': ['attendance.permissions.IsHeadmaster'],
+        'user': ['attendance.permissions.IsHeadmaster'],
+        'user_list': ['attendance.permissions.IsHeadmasterOrReadonly'],
+    },
+    'SERIALIZERS': {
+        'user_create': 'accounts.serializers.CustomUserCreateSerializer',
+        'user': 'accounts.serializers.CustomUserSerializer',
+        'current_user': 'accounts.serializers.CustomUserSerializer',
     }
 }
 
