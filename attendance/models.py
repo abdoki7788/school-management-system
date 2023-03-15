@@ -49,7 +49,7 @@ class WeeklySchedule(models.Model):
         return f"برنامه هفتگی کلاس {self.class_room}"
 
 class Class(models.Model):
-    class_id = models.CharField(max_length=3)
+    class_id = models.CharField(max_length=3, unique=True)
     weekly_schedule = models.OneToOneField(WeeklySchedule, on_delete=models.SET_NULL, null=True, related_name='class_room')
 
     def students_count(self):
