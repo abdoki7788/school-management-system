@@ -128,7 +128,7 @@ DJOSER = {
     'PERMISSIONS': {
         'user_create': ['attendance.permissions.IsHeadmaster'],
         'user_delete': ['attendance.permissions.IsHeadmaster'],
-        'user': ['attendance.permissions.IsHeadmaster'],
+        'user': ['attendance.permissions.IsHeadmasterOrReadonly'],
         'user_list': ['attendance.permissions.IsHeadmasterOrReadonly'],
     },
     'SERIALIZERS': {
