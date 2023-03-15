@@ -7,14 +7,14 @@ class StudentSerializer(serializers.ModelSerializer):
     class_room = serializers.CharField(source='class_room.class_id', read_only=True)
     class Meta:
         model = Student
-        fields = ["id", "first_name", "last_name", "number", "class_room"]
+        fields = ["id", "first_name", "last_name", "number", "class_room", "full_name"]
 
 
 
 class ClassStudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
-        fields = ["id", "first_name", "last_name", "number"]
+        fields = ["id", "full_name", "number"]
 
 class ClassListSerializer(serializers.ModelSerializer):
     students_count = serializers.IntegerField()

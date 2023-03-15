@@ -20,10 +20,19 @@ class Student(models.Model):
     last_name = models.CharField(verbose_name="Last Name", max_length=50)
     number = models.CharField(max_length=11, verbose_name="Phone Number")
     class_room = models.ForeignKey("Class", verbose_name="Class", on_delete=models.SET_NULL, null=True, related_name="students")
-
+    
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
+    
+    def __str__(self):
+        return self.full_name()
+    
 
 class Class(models.Model):
     class_id = models.CharField(max_length=3)
 
     def students_count(self):
         return self.students.count()
+    
+    def __str__(self) -> str:
+        return self.class_id
