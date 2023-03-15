@@ -26,16 +26,6 @@ class Student(models.Model):
     
     def __str__(self):
         return self.full_name()
-    
-
-class Class(models.Model):
-    class_id = models.CharField(max_length=3)
-
-    def students_count(self):
-        return self.students.count()
-    
-    def __str__(self) -> str:
-        return self.class_id
 
 class Lesson(models.Model):
     lesson_name = models.CharField(max_length=50)
@@ -49,7 +39,6 @@ class Lesson(models.Model):
 
 
 class WeeklySchedule(models.Model):
-    class_room = models.ForeignKey(Class, on_delete=models.CASCADE, related_name='weekly_schedule')
     satureday = models.ManyToManyField(Lesson, related_name='satureday')
     sunday = models.ManyToManyField(Lesson, related_name='sunday')
     monday = models.ManyToManyField(Lesson, related_name='monday')
@@ -58,3 +47,13 @@ class WeeklySchedule(models.Model):
 
     def __str__(self) -> str:
         return f"برنامه هفتگی کلاس {self.class_room}"
+
+class Class(models.Model):
+    class_id = models.CharField(max_length=3)
+    weekly_schedule = models.OneToOneField(WeeklySchedule, on_delete=models.SET_NULL, null=True, related_name='class_room')
+
+    def students_count(self):
+        return self.students.count()
+    
+    def __str__(self) -> str:
+        return self.class_id

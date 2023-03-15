@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from accounts.models import User
 from datetime import date
-from .models import Class, Student, Attendance
+from .models import Class, Student, Attendance, WeeklySchedule, Lesson
 
 class StudentSerializer(serializers.ModelSerializer):
     class_room = serializers.CharField(source='class_room.class_id', read_only=True)
@@ -21,6 +21,21 @@ class StudentSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(message)
         return value
 
+class LessonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lesson
+        fields = '__all__'
+
+class WeeklyScheduleSerializer(serializers.ModelSerializer):
+    satureday = LessonSerializer(many=True)
+    sunday = LessonSerializer(many=True)
+    monday = LessonSerializer(many=True)
+    tuesday = LessonSerializer(many=True)
+    wednesday = LessonSerializer(many=True)
+    class Meta:
+        model = WeeklySchedule
+        fields = '__all__'
+
 class ClassStudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
@@ -35,9 +50,10 @@ class ClassListSerializer(serializers.ModelSerializer):
 class ClassSerializer(serializers.ModelSerializer):
     students = ClassStudentSerializer(many=True, read_only=True)
     students_count = serializers.IntegerField(read_only=True)
+    weekly_schedule = WeeklyScheduleSerializer(required=False)
     class Meta:
         model = Class
-        fields = ["class_id", "students", "students_count"]
+        fields = ["class_id", "students", "students_count", "weekly_schedule"]
 
 class AttendanceSerializer(serializers.ModelSerializer):
     presents = StudentSerializer(many=True)
