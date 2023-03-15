@@ -36,3 +36,25 @@ class Class(models.Model):
     
     def __str__(self) -> str:
         return self.class_id
+
+class Lesson(models.Model):
+    lesson_name = models.CharField(max_length=50)
+    teacher = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='teached_lessons')
+
+    class Meta:
+        unique_together = ['lesson_name', 'teacher']
+    
+    def __str__(self) -> str:
+        return f"{self.lesson_name} توسط {self.teacher}"
+
+
+class WeeklySchedule(models.Model):
+    class_room = models.ForeignKey(Class, on_delete=models.CASCADE, related_name='weekly_schedule')
+    satureday = models.ManyToManyField(Lesson, related_name='satureday')
+    sunday = models.ManyToManyField(Lesson, related_name='sunday')
+    monday = models.ManyToManyField(Lesson, related_name='monday')
+    tuesday = models.ManyToManyField(Lesson, related_name='tuesday')
+    wednesday = models.ManyToManyField(Lesson, related_name='wednesday')
+
+    def __str__(self) -> str:
+        return f"برنامه هفتگی کلاس {self.class_room}"
