@@ -39,7 +39,7 @@ class StudentViewSet(viewsets.ModelViewSet):
 class ClassViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsSchoolStaffOrReadOnly]
     serializer_class = ClassSerializer
-    queryset = Class.objects.all().order_by('class_id')
+    queryset = Class.objects.all().order_by('-class_id')
     lookup_field = 'class_id'
 
     def get_serializer_class(self):
