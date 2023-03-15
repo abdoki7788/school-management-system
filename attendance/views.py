@@ -8,7 +8,7 @@ from rest_framework.exceptions import NotFound
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from django_filters import rest_framework as filters
-from .serializers import ClassSerializer, StudentSerializer, AttendanceListSerializer, AttendanceSerializer, AttendanceCreateSerializer
+from .serializers import ClassSerializer, ClassListSerializer, StudentSerializer, AttendanceListSerializer, AttendanceSerializer, AttendanceCreateSerializer
 from .permissions import IsHeadmasterOrReadonly, IsSchoolStaffOrReadOnly
 from .models import Class, Student, Attendance
 
@@ -42,6 +42,11 @@ class ClassViewSet(viewsets.ModelViewSet):
     queryset = Class.objects.all()
     lookup_field = 'class_id'
 
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return ClassListSerializer
+        return super().get_serializer_class()
+    
     @action(detail=True, methods=['GET', 'POST'], serializer_class=AttendanceCreateSerializer)
     def attendances(self, request, class_id):
         obj = self.get_object()
