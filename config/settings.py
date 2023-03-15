@@ -126,7 +126,7 @@ REST_FRAMEWORK = {
 
 DJOSER = {
     'PERMISSIONS': {
-        'create': 'attendance.permissions.IsHeadmaster'
+        'user_create': ['attendance.permissions.IsHeadmaster']
     }
 }
 
