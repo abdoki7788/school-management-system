@@ -3,10 +3,8 @@ from accounts.models import User
 from datetime import date
 from .models import Class, Student, Attendance, WeeklySchedule, Lesson
 from drf_writable_nested.serializers import WritableNestedModelSerializer
-from drf_writable_nested.mixins import UniqueFieldsMixin
 
 class StudentSerializer(serializers.ModelSerializer):
-    class_room = serializers.CharField(source='class_room.class_id', read_only=True)
     full_name = serializers.CharField(read_only=True)
     class Meta:
         model = Student
@@ -42,9 +40,6 @@ class WeeklyScheduleSerializer(WritableNestedModelSerializer):
     class Meta:
         model = WeeklySchedule
         fields = '__all__'
-    
-    def create(self, validated_data):
-        return super().create(validated_data)
 
 class ClassStudentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -57,7 +52,7 @@ class ClassListSerializer(serializers.ModelSerializer):
         model = Class
         fields = ["class_id", "students_count"]
 
-class ClassSerializer(serializers.ModelSerializer):
+class ClassSerializer(WritableNestedModelSerializer):
     students = ClassStudentSerializer(many=True, read_only=True)
     students_count = serializers.IntegerField(read_only=True)
     weekly_schedule = WeeklyScheduleSerializer(required=False)

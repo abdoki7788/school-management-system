@@ -30,12 +30,12 @@ class Student(models.Model):
 class Lesson(models.Model):
     lesson_name = models.CharField(max_length=50)
     teacher = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='teached_lessons')
-
-    class Meta:
-        unique_together = ['lesson_name', 'teacher']
     
     def __str__(self) -> str:
         return f"{self.lesson_name} توسط {self.teacher}"
+
+    class Meta:
+        unique_together = ['lesson_name', 'teacher']
 
 
 class WeeklySchedule(models.Model):
@@ -49,7 +49,7 @@ class WeeklySchedule(models.Model):
         return f"برنامه هفتگی کلاس {self.class_room}"
 
 class Class(models.Model):
-    class_id = models.CharField(max_length=3, unique=True)
+    class_id = models.CharField(max_length=3, primary_key=True)
     weekly_schedule = models.OneToOneField(WeeklySchedule, on_delete=models.SET_NULL, null=True, related_name='class_room')
 
     def students_count(self):
