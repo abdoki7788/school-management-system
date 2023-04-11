@@ -8,11 +8,33 @@ class StudentSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(read_only=True)
     class Meta:
         model = Student
-        fields = ["id", "first_name", "last_name", "number", "class_room", "full_name"]
+        fields = ["id", "first_name", "last_name", "number", "student_id", "serial_code", "class_room", "full_name"]
     
     def validate_number(self, value):
         if len(value) != 11:
             message = 'phone number length should be 11.'
+            raise serializers.ValidationError(message)
+        try:
+            int(value)
+        except ValueError:
+            message = 'it should be a valid number'
+            raise serializers.ValidationError(message)
+        return value
+    
+    def validate_student_id(self, value):
+        if len(value) != 10:
+            message = 'id length should be 10.'
+            raise serializers.ValidationError(message)
+        try:
+            int(value)
+        except ValueError:
+            message = 'it should be a valid number'
+            raise serializers.ValidationError(message)
+        return value
+    
+    def validate_serial_code(self, value):
+        if len(value) != 6:
+            message = 'serial code length should be 10.'
             raise serializers.ValidationError(message)
         try:
             int(value)

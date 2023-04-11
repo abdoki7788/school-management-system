@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import datetime
 from accounts.models import User
+from . import validators
 
 # Create your models here.
 
@@ -19,11 +20,16 @@ class Student(models.Model):
     first_name = models.CharField(verbose_name="First Name", max_length=50)
     last_name = models.CharField(verbose_name="Last Name", max_length=50)
     number = models.CharField(max_length=11, verbose_name="Phone Number")
+    student_id = models.CharField(max_length=10, validators=[validators.student_id_validator])
+    serial_code = models.CharField(max_length=6, validators=[validators.serial_code_validator])
     class_room = models.ForeignKey("Class", verbose_name="Class", on_delete=models.SET_NULL, null=True, related_name="students")
     
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
     
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
     def __str__(self):
         return self.full_name()
 
