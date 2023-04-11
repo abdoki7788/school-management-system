@@ -1,9 +1,16 @@
 from django.db import models
+from django.utils import timezone
+import os
 from datetime import datetime
 from accounts.models import User
 from . import validators
 
 # Create your models here.
+
+def student_image_upload(instance, filename):
+    now = timezone.now()
+    base, extension = os.path.splitext(filename.lower())
+    return f"students/{instance.full_name()}/{now:%Y-%m-%d-%H%M%S}{extension}"
 
 class Attendance(models.Model):
     class_room = models.ForeignKey("Class", on_delete=models.CASCADE, related_name="attendances")
@@ -19,6 +26,7 @@ class Attendance(models.Model):
 class Student(models.Model):
     first_name = models.CharField(verbose_name="First Name", max_length=50)
     last_name = models.CharField(verbose_name="Last Name", max_length=50)
+    image = models.ImageField(default='defaults/person.png', upload_to=student_image_upload)
     number = models.CharField(max_length=11, verbose_name="Phone Number")
     student_id = models.CharField(max_length=10, validators=[validators.student_id_validator])
     serial_code = models.CharField(max_length=6, validators=[validators.serial_code_validator])
@@ -56,7 +64,7 @@ class WeeklySchedule(models.Model):
 
 class Class(models.Model):
     class_id = models.CharField(max_length=3, primary_key=True)
-    weekly_schedule = models.OneToOneField(WeeklySchedule, on_delete=models.SET_NULL, null=True, related_name='class_room')
+    weekly_schedule = models.OneToOneField(WeeklySchedule, on_delete=models.SET_NULL, null=True, blank=True, related_name='class_room')
 
     def students_count(self):
         return self.students.count()
