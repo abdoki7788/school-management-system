@@ -46,7 +46,19 @@ class ClassViewSet(viewsets.ModelViewSet):
         if self.action == 'list':
             return ClassListSerializer
         return super().get_serializer_class()
-    
+    @action(detail=True, methods=['GET', 'POST'])
+    def students(self, request, class_id):
+        obj = self.get_object()
+        if request.method.lower() == 'get':
+            return Response(StudentSerializer(obj.students, many=True).data)
+        if request.method.lower() == 'post':
+            serialized_data = StudentSerializer(data=request.data)
+            if serialized_data.is_valid():
+                serialized_data.save(class_room=obj)
+                return Response(serialized_data.data, status=201)
+            else:
+                return Response(serialized_data.errors)
+
     @action(detail=True, methods=['GET', 'POST'], serializer_class=AttendanceCreateSerializer)
     def attendances(self, request, class_id):
         obj = self.get_object()
@@ -65,7 +77,7 @@ class ClassViewSet(viewsets.ModelViewSet):
                 except IntegrityError:
                     return Response({'error': "attendance object cant be created"}, status=400)
             else:
-                return Response(serialized_data.errors)
+                return Response(serialized_data.errors, 401)
 
 
     @action(detail=True, methods=['GET'], url_path=r'attendances/(?P<attendance_date>(\d{4}-\d{2}-\d{2}))')

@@ -8,7 +8,7 @@ class StudentSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(read_only=True)
     class Meta:
         model = Student
-        fields = ["id", "first_name", "last_name", "number", "student_id", "serial_code", "class_room", "full_name"]
+        fields = ["id", "first_name", "last_name", "number", "student_id", "serial_code", "class_room", "full_name", "image"]
 
 class LessonSerializer(serializers.ModelSerializer):
     class Meta:
@@ -33,7 +33,7 @@ class WeeklyScheduleSerializer(WritableNestedModelSerializer):
 class ClassStudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
-        fields = ["id", "full_name", "number"]
+        fields = ["id", "full_name", "number", "image"]
 
 class ClassListSerializer(serializers.ModelSerializer):
     students_count = serializers.IntegerField()
