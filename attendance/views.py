@@ -8,8 +8,8 @@ from rest_framework.exceptions import NotFound
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from django_filters import rest_framework as filters
-from .serializers import ClassSerializer, ClassListSerializer, StudentSerializer, AttendanceListSerializer, AttendanceSerializer, AttendanceCreateSerializer
-from .permissions import IsHeadmasterOrReadonly, IsSchoolStaffOrReadOnly
+from .serializers import ClassSerializer, ClassStudentSerializer, ClassListSerializer, StudentSerializer, AttendanceListSerializer, AttendanceSerializer, AttendanceCreateSerializer
+from .permissions import IsSchoolStaffOrReadOnly
 from .models import Class, Student, Attendance
 
 User = get_user_model()
@@ -50,14 +50,14 @@ class ClassViewSet(viewsets.ModelViewSet):
     def students(self, request, class_id):
         obj = self.get_object()
         if request.method.lower() == 'get':
-            return Response(StudentSerializer(obj.students, many=True).data)
+            return Response(ClassStudentSerializer(obj.students, many=True, context={'request': request}).data)
         if request.method.lower() == 'post':
-            serialized_data = StudentSerializer(data=request.data)
+            serialized_data = StudentSerializer(data=request.data, context={'request': request})
             if serialized_data.is_valid():
                 serialized_data.save(class_room=obj)
                 return Response(serialized_data.data, status=201)
             else:
-                return Response(serialized_data.errors)
+                return Response(serialized_data.errors, status=400)
 
     @action(detail=True, methods=['GET', 'POST'], serializer_class=AttendanceCreateSerializer)
     def attendances(self, request, class_id):
