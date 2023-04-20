@@ -4,15 +4,15 @@ from django.contrib.auth import get_user_model
 # rest framework
 from rest_framework import viewsets
 from rest_framework.response import Response
-from rest_framework.exceptions import NotFound
+from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 
 from django_filters import rest_framework as filters
 
 # local imports
-from .serializers import ClassSerializer, ClassStudentSerializer, ClassListSerializer, StudentSerializer
-from .permissions import IsSchoolStaffOrReadOnly
+from .serializers import ClassSerializer, ClassStudentSerializer, ClassListSerializer, StudentSerializer, DashboardClassSerializer
+from .permissions import IsSchoolStaffOrReadOnly, IsHeadmaster
 from .models import Class, Student, Attendance
 
 import datetime
@@ -82,6 +82,27 @@ class ClassViewSet(viewsets.ModelViewSet):
                 return Response(serialized_data.data, status=201)
             else:
                 return Response(serialized_data.errors, status=400)
+
+
+## view for dashboard home ( just get method )
+class DashboardHome(APIView):
+    permission_classes = [IsHeadmaster]
+
+    def get(self, request, *args, **kwargs):
+        staff_count = User.objects.count()
+        students_count = Student.objects.count()
+        classes_count = Class.objects.count()
+        classes = DashboardClassSerializer(Class.objects.all(), many=True, context={'request': request})
+
+        return Response({
+            'staff_count': staff_count, 
+            'students_count': students_count, 
+            'classes_count': classes_count,
+            'classes': classes.data
+        })
+
+
+
 
     ###       Attendance System Functionalities Commented Because of Lack of time to complete
 

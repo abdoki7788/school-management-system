@@ -62,6 +62,19 @@ class ClassSerializer(WritableNestedModelSerializer):
         model = Class
         fields = ["class_id", "students", "students_count", "weekly_schedule"]
 
+## serializer for student serializer in dashboard class
+class DashboardStudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = ["id", "full_name", "number", "student_id", "serial_code", "image"]
+
+## dashboard class serializer
+class DashboardClassSerializer(serializers.ModelSerializer):
+    students = DashboardStudentSerializer(many=True, read_only=True)
+    class Meta:
+        model = Class
+        fields = ["class_id", "students"]
+
 
 ###     Attendance System Functionalities Commented Because of Lack of time to complete
 
