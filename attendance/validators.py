@@ -1,5 +1,9 @@
 from django.core.exceptions import ValidationError
 
+# django database data (model) validators
+
+
+## validate serial codes for students
 def serial_code_validator(value):
     if len(value) != 6:
         message = 'serial code length should be 6.'
@@ -11,6 +15,7 @@ def serial_code_validator(value):
         raise ValidationError(message)
 
 
+## validate identifiers for students
 def student_id_validator(value):
     if len(value) != 10:
         message = 'id length should be 10.'
