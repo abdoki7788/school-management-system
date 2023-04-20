@@ -43,7 +43,8 @@ class Student(models.Model):
 
 class Lesson(models.Model):
     lesson_name = models.CharField(max_length=50)
-    teacher = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='teached_lessons')
+    teacher = models.CharField(max_length=50, null=True)
+    priority = models.IntegerField(default=1)
     
     def __str__(self) -> str:
         return f"{self.lesson_name} توسط {self.teacher}"

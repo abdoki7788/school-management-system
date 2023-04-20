@@ -13,11 +13,17 @@ class StudentSerializer(serializers.ModelSerializer):
 class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
+        validators = []
         fields = '__all__'
+        ordering = '-priority'
     
-    def create(self, validated_data):
-        obj, _ = Lesson.objects.get_or_create(**validated_data)
-        return obj
+    def save(self, **kwargs):
+        validated_data = {**self.validated_data, **kwargs}
+        print(validated_data)
+        qs = Lesson.objects.filter(lesson_name=validated_data['lesson_name'], teacher= validated_data['teacher'])
+        if qs.exists():
+            self.instance = qs.first()
+        return super().save(**kwargs)
 
 class WeeklyScheduleSerializer(WritableNestedModelSerializer):
     satureday = LessonSerializer(many=True)
@@ -28,7 +34,7 @@ class WeeklyScheduleSerializer(WritableNestedModelSerializer):
 
     class Meta:
         model = WeeklySchedule
-        fields = '__all__'
+        exclude = ['id']
 
 class ClassStudentSerializer(serializers.ModelSerializer):
     class Meta:
