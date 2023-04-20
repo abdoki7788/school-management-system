@@ -1,15 +1,16 @@
 from rest_framework import serializers
-from accounts.models import User
-from datetime import date
-from .models import Class, Student, Attendance, WeeklySchedule, Lesson
 from drf_writable_nested.serializers import WritableNestedModelSerializer
 
+from .models import Class, Student, Attendance, WeeklySchedule, Lesson
+
+## serializer for students view . for creating, updating and getting
 class StudentSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(read_only=True)
     class Meta:
         model = Student
         fields = ["id", "first_name", "last_name", "number", "student_id", "serial_code", "class_room", "full_name", "image"]
 
+## serializer for lessons
 class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
@@ -17,14 +18,16 @@ class LessonSerializer(serializers.ModelSerializer):
         fields = '__all__'
         ordering = '-priority'
     
+    ## some extra functionalities on lesson save for get if lesson was created
     def save(self, **kwargs):
         validated_data = {**self.validated_data, **kwargs}
         print(validated_data)
-        qs = Lesson.objects.filter(lesson_name=validated_data['lesson_name'], teacher= validated_data['teacher'])
+        qs = Lesson.objects.filter(lesson_name=validated_data['lesson_name'], teacher=validated_data['teacher'])
         if qs.exists():
             self.instance = qs.first()
         return super().save(**kwargs)
 
+## weekly schedule serializer with Writable Nested Serializer library
 class WeeklyScheduleSerializer(WritableNestedModelSerializer):
     satureday = LessonSerializer(many=True)
     sunday = LessonSerializer(many=True)
@@ -36,17 +39,21 @@ class WeeklyScheduleSerializer(WritableNestedModelSerializer):
         model = WeeklySchedule
         exclude = ['id']
 
+
+## student serializer for showing in class views
 class ClassStudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = ["id", "full_name", "number", "image"]
 
+## class serializer for showing list
 class ClassListSerializer(serializers.ModelSerializer):
     students_count = serializers.IntegerField()
     class Meta:
         model = Class
         fields = ["class_id", "students_count"]
 
+## class serializer for showing generally and creating & updating
 class ClassSerializer(WritableNestedModelSerializer):
     students = ClassStudentSerializer(many=True, read_only=True)
     students_count = serializers.IntegerField(read_only=True)
