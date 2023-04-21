@@ -21,4 +21,4 @@ class User(AbstractUser):
         },
         primary_key=True
     )
-    type = models.CharField(choices=TYPE_CHOICES, max_length=1)
+    type = models.CharField(choices=TYPE_CHOICES, max_length=1, default='H')

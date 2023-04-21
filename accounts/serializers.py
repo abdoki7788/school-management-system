@@ -6,6 +6,7 @@ from rest_framework import serializers
 User = get_user_model()
 
 class CustomUserCreateSerializer(UserCreateSerializer):
+    type = serializers.CharField(write_only=True, default='H')
     class Meta:
         model = User
         fields = tuple(User.REQUIRED_FIELDS) + (
