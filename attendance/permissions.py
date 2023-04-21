@@ -3,6 +3,7 @@ from rest_framework import permissions
 class IsHeadmaster(permissions.BasePermission):
     ## if user is headmaster , then can access to view
     def has_permission(self, request, view):
+        print(request.user.type)
         return request.user.is_authenticated and request.user.type == 'H'
 
 class IsHeadmasterOrReadonly(permissions.BasePermission):

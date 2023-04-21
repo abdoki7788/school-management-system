@@ -48,6 +48,9 @@ class UserViewSet(JUserViewSet):
             return Response(status=204)
         return super().destroy(request, *args, **kwargs)
 
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
     def activation(self):
         pass
     def resend_activation(self):
