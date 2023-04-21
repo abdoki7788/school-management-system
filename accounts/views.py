@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.contrib.auth import get_user_model
 
+from rest_framework.response import Response
+
 from djoser.views import TokenCreateView, UserViewSet as JUserViewSet
 from djoser.conf import settings
 from djoser.compat import get_user_email
@@ -37,6 +39,14 @@ class UserViewSet(JUserViewSet):
             return settings.SERIALIZERS.current_user
 
         return self.serializer_class
+    
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        print(request.user.type == 'H')
+        if request.user.type == 'H':
+            self.perform_destroy(instance)
+            return Response(status=204)
+        return super().destroy(request, *args, **kwargs)
 
     def activation(self):
         pass

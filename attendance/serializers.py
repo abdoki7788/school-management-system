@@ -10,6 +10,7 @@ class StudentSerializer(serializers.ModelSerializer):
         model = Student
         fields = ["id", "first_name", "last_name", "number", "student_id", "serial_code", "class_room", "full_name", "image"]
 
+
 ## serializer for lessons
 class LessonSerializer(serializers.ModelSerializer):
     class Meta:
@@ -44,7 +45,7 @@ class WeeklyScheduleSerializer(WritableNestedModelSerializer):
 class ClassStudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
-        fields = ["id", "full_name", "number", "image"]
+        fields = ["id", "full_name", "number", "student_id", "serial_code", "image"]
 
 ## class serializer for showing list
 class ClassListSerializer(serializers.ModelSerializer):
@@ -62,15 +63,10 @@ class ClassSerializer(WritableNestedModelSerializer):
         model = Class
         fields = ["class_id", "students", "students_count", "weekly_schedule"]
 
-## serializer for student serializer in dashboard class
-class DashboardStudentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Student
-        fields = ["id", "full_name", "number", "student_id", "serial_code", "image"]
 
 ## dashboard class serializer
 class DashboardClassSerializer(serializers.ModelSerializer):
-    students = DashboardStudentSerializer(many=True, read_only=True)
+    students = ClassStudentSerializer(many=True, read_only=True)
     class Meta:
         model = Class
         fields = ["class_id", "students"]
