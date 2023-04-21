@@ -17,7 +17,7 @@ class CustomUserCreateSerializer(UserCreateSerializer):
 
 class CustomUserSerializer(UserSerializer):
     type_display = serializers.CharField(source='get_type_display', read_only=True)
-    type = serializers.CharField(write_only=True)
+    type = serializers.CharField(write_only=True, default='H')
     class Meta:
         model = User
         fields = tuple(User.REQUIRED_FIELDS) + (
