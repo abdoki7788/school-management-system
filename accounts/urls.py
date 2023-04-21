@@ -12,4 +12,4 @@ urlpatterns = [
     path("token/logout/", TokenDestroyView.as_view(), name="logout"),
 ]
 
-urlpatterns = router.urls
+urlpatterns += router.urls
