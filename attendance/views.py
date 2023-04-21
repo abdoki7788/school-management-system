@@ -92,6 +92,8 @@ class DashboardHome(APIView):
         staff_count = User.objects.count()
         students_count = Student.objects.count()
         classes_count = Class.objects.count()
+
+        # get all classes with their students
         classes = DashboardClassSerializer(Class.objects.all(), many=True, context={'request': request})
 
         return Response({

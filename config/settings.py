@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,14 +25,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-zhh)-^1j@vpwv1m$_&q248v+a-jj99bop&^rf3=e-!d2d+5#3g"
+
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.environ['DEBUG'])
 
 ALLOWED_HOSTS = ["*"]
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOWED_ORIGINS = ['https://moeensedaqati.ir']
+CORS_ALLOWED_ORIGINS = ['https://moeensedaqati.ir', 'http://localhost', 'http://127.0.0.1']
 
 
 # Application definition
@@ -88,8 +94,12 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "data/db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ['DB_NAME'],
+        "USER": os.environ['DB_USERNAME'],
+        "PASSWORD": os.environ['DB_PASSWORD'],
+        "HOST": os.environ['DB_HOSTNAME'],
+        "PORT": os.environ['DB_PORT'],
     }
 }
 
