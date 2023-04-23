@@ -80,6 +80,9 @@ class Class(models.Model):
     class_id = models.CharField(max_length=3, primary_key=True)
     weekly_schedule = models.OneToOneField(WeeklySchedule, on_delete=models.SET_NULL, null=True, blank=True, related_name='class_room')
 
+    class Meta:
+        ordering = ['-class_id']
+
     # this function returns count of class students
     def students_count(self):
         return self.students.count()
