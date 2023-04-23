@@ -9,6 +9,7 @@ class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = ["id", "first_name", "last_name", "number", "student_id", "serial_code", "class_room", "full_name", "image"]
+        extra_kwargs = {"class_room": {"required": False}}
 
 
 ## serializer for lessons

@@ -37,7 +37,7 @@ class Student(models.Model):
     number = models.CharField(max_length=11, verbose_name="Phone Number")
     student_id = models.CharField(max_length=10, validators=[validators.student_id_validator])
     serial_code = models.CharField(max_length=6, validators=[validators.serial_code_validator])
-    class_room = models.ForeignKey("Class", verbose_name="Class", on_delete=models.SET_NULL, null=True, related_name="students")
+    class_room = models.ForeignKey("Class", verbose_name="Class", on_delete=models.SET_NULL, null=True, blank=True, related_name="students")
     
     # get student full name by binding first_name and last_name
     def full_name(self):

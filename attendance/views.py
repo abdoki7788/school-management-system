@@ -36,13 +36,13 @@ class StudentViewSet(viewsets.ModelViewSet):
     serializer_class = StudentSerializer
     queryset = Student.objects.all()
     filterset_class = StudentFilterSet
+
     @action(detail=True, methods=["GET"])
     def absents(self, request, pk):
         student = self.get_object()
         return Response({
             "absents_count": student.absent.count(),
             "absent": [i.date for i in student.absent.all()]
-
         })
 
 
