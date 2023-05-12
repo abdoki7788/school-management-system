@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from djoser.views import TokenCreateView, UserViewSet as JUserViewSet
 from djoser.conf import settings
-from djoser.compat import get_user_email
+from djoser import utils
 
 # Create your views here.
 
@@ -42,11 +42,11 @@ class UserViewSet(JUserViewSet):
     
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
-        print(request.user.type == 'H')
-        if request.user.type == 'H':
-            self.perform_destroy(instance)
-            return Response(status=204)
-        return super().destroy(request, *args, **kwargs)
+
+        if instance == request.user:
+            utils.logout_user(self.request)
+        self.perform_destroy(instance)
+        return Response(status=204)
 
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)

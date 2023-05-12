@@ -90,11 +90,11 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        # 'NAME': 'school',
-        # 'USER': 'root',
-        # 'PASSWORD': 'kianish40',
-        # 'HOST': 'localhost',
-        # 'PORT': '',
+        'NAME': 'school',
+        'USER': 'root',
+        'PASSWORD': 'kianish40',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
@@ -132,9 +132,9 @@ REST_FRAMEWORK = {
 
 DJOSER = {
     'PERMISSIONS': {
-        'user_create': ['attendance.permissions.IsHeadmaster'],
-        'user': ['attendance.permissions.IsHeadmasterOrReadonly'],
-        'user_list': ['attendance.permissions.IsHeadmasterOrReadonly'],
+        'user_create': ['accounts.permissions.IsHeadmaster'],
+        'user': ['accounts.permissions.IsHeadmasterOrReadonly'],
+        'user_list': ['accounts.permissions.IsHeadmasterOrReadonly'],
     },
     'SERIALIZERS': {
         'user_create': 'accounts.serializers.CustomUserCreateSerializer',
