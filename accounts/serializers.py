@@ -14,6 +14,7 @@ class CustomUserCreateSerializer(UserCreateSerializer):
             settings.USER_ID_FIELD,
             "type",
             "password",
+            "full_name"
         )
 
 class CustomUserSerializer(UserSerializer):
@@ -25,7 +26,8 @@ class CustomUserSerializer(UserSerializer):
             settings.USER_ID_FIELD,
             settings.LOGIN_FIELD,
             "type_display",
-            "type"
+            "type",
+            "full_name"
         )
         read_only_fields = (settings.LOGIN_FIELD,)
     def update(self, instance, validated_data):
