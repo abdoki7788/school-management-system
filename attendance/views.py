@@ -86,8 +86,6 @@ class ClassViewSet(viewsets.ModelViewSet):
 
 ## view for dashboard home ( just get method )
 class DashboardHome(APIView):
-    permission_classes = [IsHeadmaster]
-
     def get(self, request, *args, **kwargs):
         staff_count = User.objects.count()
         students_count = Student.objects.count()
