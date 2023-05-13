@@ -47,6 +47,10 @@ class Student(models.Model):
     class_room = models.ForeignKey("Class", verbose_name="Class", on_delete=models.SET_NULL, null=True, blank=True, related_name="students")
     discipline = models.CharField(max_length=6, choices=DISCIPLINE_CHOICES, default="white")
     
+    class Meta:
+        verbose_name = "دانش آموز"
+        verbose_name_plural = "دانش آموز ها"
+
     # get student full name by binding first_name and last_name
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
@@ -90,6 +94,8 @@ class Class(models.Model):
 
     class Meta:
         ordering = ['-class_id']
+        verbose_name = "کلاس"
+        verbose_name_plural = "کلاس ها"
 
     # this function returns count of class students
     def students_count(self):
