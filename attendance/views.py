@@ -12,7 +12,7 @@ from django_filters import rest_framework as filters
 
 # local imports
 from .serializers import ClassSerializer, ClassStudentSerializer, ClassListSerializer, StudentSerializer, DashboardClassSerializer
-from .permissions import IsSchoolStaffOrReadOnly, IsHeadmaster
+from .permissions import IsSchoolStaffOrReadOnly
 from .models import Class, Student, Attendance
 
 import datetime
