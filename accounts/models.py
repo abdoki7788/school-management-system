@@ -47,9 +47,9 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser):
     username_validator = UsernameValidator()
     TYPE_CHOICES = (
-        ("H", "Headmaster"),
-        ("S", "Staff"),
-        ("T", "Teacher"),
+        ("H", "مدیر"),
+        ("S", "معاون"),
+        ("T", "معلم"),
     )
 
     identity = models.CharField(

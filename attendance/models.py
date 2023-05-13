@@ -31,6 +31,13 @@ class Attendance(models.Model):
 
 ## student model
 class Student(models.Model):
+    DISCIPLINE_CHOICES = (
+        ("red", "قرمز"),
+        ("green", "سبز"),
+        ("white", "سفید"),
+        ("yellow", "زرد"),
+    )
+
     first_name = models.CharField(verbose_name="First Name", max_length=50)
     last_name = models.CharField(verbose_name="Last Name", max_length=50)
     image = models.ImageField(default='defaults/person.png', upload_to=student_image_upload)
@@ -38,6 +45,7 @@ class Student(models.Model):
     student_id = models.CharField(max_length=10, validators=[validators.student_id_validator])
     serial_code = models.CharField(max_length=6, validators=[validators.serial_code_validator])
     class_room = models.ForeignKey("Class", verbose_name="Class", on_delete=models.SET_NULL, null=True, blank=True, related_name="students")
+    discipline = models.CharField(max_length=6, choices=DISCIPLINE_CHOICES, default="white")
     
     # get student full name by binding first_name and last_name
     def full_name(self):
