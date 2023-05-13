@@ -5,8 +5,17 @@ from rest_framework import serializers
 
 User = get_user_model()
 
+
+class CustomChoiceField(serializers.ChoiceField):
+    def to_representation(self, value):
+        if value in ('', None):
+            return value
+        return self.choices.get(str(value), value)
+
+
+
 class CustomUserCreateSerializer(UserCreateSerializer):
-    type = serializers.CharField()
+    type = CustomChoiceField(choices=User.TYPE_CHOICES)
     class Meta:
         model = User
         fields = tuple(User.REQUIRED_FIELDS) + (
@@ -17,15 +26,14 @@ class CustomUserCreateSerializer(UserCreateSerializer):
             "full_name"
         )
 
+
 class CustomUserSerializer(UserSerializer):
-    type_display = serializers.CharField(source='get_type_display', read_only=True)
-    type = serializers.CharField(write_only=True, default='H')
+    type = CustomChoiceField(choices=User.TYPE_CHOICES)
     class Meta:
         model = User
         fields = tuple(User.REQUIRED_FIELDS) + (
             settings.USER_ID_FIELD,
             settings.LOGIN_FIELD,
-            "type_display",
             "type",
             "full_name"
         )

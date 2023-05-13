@@ -46,11 +46,11 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     username_validator = UsernameValidator()
-    TYPE_CHOICES = (
+    TYPE_CHOICES = [
         ("H", "مدیر"),
         ("S", "معاون"),
         ("T", "معلم"),
-    )
+    ]
 
     identity = models.CharField(
         max_length=60,
@@ -63,7 +63,7 @@ class User(AbstractBaseUser):
         primary_key=True,
         verbose_name="شناسه"
     )
-    type = models.CharField(choices=TYPE_CHOICES, max_length=1, default='H', verbose_name="نوع کاربر")
+    type = models.CharField(choices=TYPE_CHOICES, max_length=1, verbose_name="نوع کاربر")
     full_name = models.CharField(max_length=60, null=True, blank=True, verbose_name="نام کامل")
     is_staff = models.BooleanField(default=False)
 
