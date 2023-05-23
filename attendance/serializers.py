@@ -2,13 +2,15 @@ from rest_framework import serializers
 from drf_writable_nested.serializers import WritableNestedModelSerializer
 
 from .models import Class, Student, Attendance, WeeklySchedule, Lesson
+from accounts.serializers import CustomChoiceField
 
 ## serializer for students view . for creating, updating and getting
 class StudentSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(read_only=True)
+    discipline = CustomChoiceField(Student.DISCIPLINE_CHOICES)
     class Meta:
         model = Student
-        fields = ["id", "first_name", "last_name", "number", "student_id", "serial_code", "class_room", "full_name", "image"]
+        fields = ["id", "first_name", "last_name", "number", "student_id", "serial_code", "class_room", "full_name", "image", "discipline"]
         extra_kwargs = {"class_room": {"required": False}}
 
 
@@ -44,9 +46,10 @@ class WeeklyScheduleSerializer(WritableNestedModelSerializer):
 
 ## student serializer for showing in class views
 class ClassStudentSerializer(serializers.ModelSerializer):
+    discipline = CustomChoiceField(Student.DISCIPLINE_CHOICES)
     class Meta:
         model = Student
-        fields = ["id", "full_name", "number", "student_id", "serial_code", "image"]
+        fields = ["id", "full_name", "number", "student_id", "serial_code", "image", "discipline"]
 
 ## class serializer for showing list
 class ClassListSerializer(serializers.ModelSerializer):

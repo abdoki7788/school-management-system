@@ -32,20 +32,20 @@ class Attendance(models.Model):
 ## student model
 class Student(models.Model):
     DISCIPLINE_CHOICES = (
-        ("red", "قرمز"),
-        ("green", "سبز"),
-        ("white", "سفید"),
-        ("yellow", "زرد"),
+        ("R", "red"),
+        ("G", "green"),
+        ("W", "white"),
+        ("Y", "yellow"),
     )
 
-    first_name = models.CharField(verbose_name="First Name", max_length=50)
-    last_name = models.CharField(verbose_name="Last Name", max_length=50)
-    image = models.ImageField(default='defaults/person.png', upload_to=student_image_upload)
-    number = models.CharField(max_length=11, verbose_name="Phone Number")
-    student_id = models.CharField(max_length=10, validators=[validators.student_id_validator])
-    serial_code = models.CharField(max_length=6, validators=[validators.serial_code_validator])
-    class_room = models.ForeignKey("Class", verbose_name="Class", on_delete=models.SET_NULL, null=True, blank=True, related_name="students")
-    discipline = models.CharField(max_length=6, choices=DISCIPLINE_CHOICES, default="white")
+    first_name = models.CharField("نام", max_length=50)
+    last_name = models.CharField("نام خانوادگی", max_length=50)
+    image = models.ImageField("عکس", default='defaults/person.png', upload_to=student_image_upload, blank=True)
+    number = models.CharField("شماره تلفن", max_length=11)
+    student_id = models.CharField("شماره شناسنامه", max_length=10, validators=[validators.student_id_validator])
+    serial_code = models.CharField("کد سریال شناسنامه", max_length=6, validators=[validators.serial_code_validator])
+    class_room = models.ForeignKey("Class", verbose_name="کلاس", on_delete=models.SET_NULL, null=True, blank=True, related_name="students")
+    discipline = models.CharField("سطح انظباط", max_length=6, choices=DISCIPLINE_CHOICES, default="W")
     
     class Meta:
         verbose_name = "دانش آموز"
