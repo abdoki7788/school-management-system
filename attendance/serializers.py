@@ -7,7 +7,7 @@ from accounts.serializers import CustomChoiceField
 ## serializer for students view . for creating, updating and getting
 class StudentSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(read_only=True)
-    discipline = CustomChoiceField(Student.DISCIPLINE_CHOICES)
+    discipline = CustomChoiceField(Student.DISCIPLINE_CHOICES, required=False)
     class Meta:
         model = Student
         fields = ["id", "first_name", "last_name", "number", "student_id", "serial_code", "class_room", "full_name", "image", "discipline"]
