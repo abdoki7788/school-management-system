@@ -15,7 +15,7 @@ class CustomChoiceField(serializers.ChoiceField):
 
 
 class CustomUserCreateSerializer(UserCreateSerializer):
-    type = CustomChoiceField(choices=User.TYPE_CHOICES)
+    type = CustomChoiceField(choices=User.TYPE_CHOICES, required=True)
     class Meta:
         model = User
         fields = tuple(User.REQUIRED_FIELDS) + (
