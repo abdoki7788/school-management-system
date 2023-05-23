@@ -58,7 +58,7 @@ class User(AbstractBaseUser):
         help_text= "لازم است. ۱۵۰ حرف یا کمتر. فقط حروف, اعداد و @/./+/-/_",
         validators=[username_validator],
         error_messages={
-            "unique": "A user with that username already exists.",
+            "unique": _("A user with that username already exists."),
         },
         primary_key=True,
         verbose_name="شناسه"
