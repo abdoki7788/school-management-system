@@ -76,6 +76,12 @@ class User(AbstractBaseUser):
     
     def has_perm(self, p):
         return self.is_staff
+
+    def get_display_name(self):
+        if self.full_name:
+            return self.full_name
+        else:
+            return self.identity
     
     class Meta:
         verbose_name = "کاربر"

@@ -40,13 +40,15 @@ class UserCreateSerializerNoType(UserCreateSerializer):
 
 class CustomUserSerializer(UserSerializer):
     type = CustomChoiceField(choices=User.TYPE_CHOICES)
+    display_name = serializers.CharField(source="get_display_name", read_only=True)
     class Meta:
         model = User
         fields = tuple(User.REQUIRED_FIELDS) + (
             settings.USER_ID_FIELD,
             settings.LOGIN_FIELD,
             "type",
-            "full_name"
+            "full_name",
+            "display_name"
         )
         read_only_fields = (settings.LOGIN_FIELD,)
     def update(self, instance, validated_data):
