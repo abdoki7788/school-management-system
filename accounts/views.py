@@ -2,10 +2,13 @@ from django.shortcuts import render
 from django.contrib.auth import get_user_model
 
 from rest_framework.response import Response
+from rest_framework.decorators import action
 
 from djoser.views import TokenCreateView, UserViewSet as JUserViewSet
 from djoser.conf import settings
 from djoser import utils
+
+from .serializers import CustomUserSerializer, UserCreateSerializerNoType
 
 # Create your views here.
 
@@ -15,6 +18,21 @@ class CustomTokenCreateView(TokenCreateView):
     authentication_classes = []
 
 class UserViewSet(JUserViewSet):
+
+    def user_type_view(self, request, type, *args, **kwargs):
+        if request.method.lower() == "get":
+            q = User.objects.filter(type=type)
+            serializer = CustomUserSerializer(q, many=True)
+            return Response(serializer.data, status=200)
+        else:
+            serializer = UserCreateSerializerNoType(data=request.data)
+            if serializer.is_valid():
+                serializer.validated_data["type"] = type
+                self.perform_create(serializer)
+                return Response(serializer.data, status=201)
+            else:
+                return Response(serializer.errors, status=400)
+        
     def get_permissions(self):
         if self.action == "create":
             self.permission_classes = settings.PERMISSIONS.user_create
@@ -50,6 +68,19 @@ class UserViewSet(JUserViewSet):
 
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
+    
+    @action(["get", "post"], False)
+    def teachers(self, request, *args, **kwargs):
+        return self.user_type_view(request, "T", *args, **kwargs)
+    
+    @action(["get", "post"], False)
+    def staffs(self, request, *args, **kwargs):
+        return self.user_type_view(request, "S", *args, **kwargs)
+    
+    @action(["get", "post"], False)
+    def headmasters(self, request, *args, **kwargs):
+        return self.user_type_view(request, "H", *args, **kwargs)
+        
 
     def activation(self):
         pass

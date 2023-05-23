@@ -26,6 +26,17 @@ class CustomUserCreateSerializer(UserCreateSerializer):
             "full_name"
         )
 
+class UserCreateSerializerNoType(UserCreateSerializer):
+    class Meta:
+        model = User
+        fields = tuple(User.REQUIRED_FIELDS) + (
+            settings.LOGIN_FIELD,
+            settings.USER_ID_FIELD,
+            "password",
+            "full_name"
+        )
+
+
 
 class CustomUserSerializer(UserSerializer):
     type = CustomChoiceField(choices=User.TYPE_CHOICES)
