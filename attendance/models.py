@@ -32,10 +32,10 @@ class Attendance(models.Model):
 ## student model
 class Student(models.Model):
     DISCIPLINE_CHOICES = (
-        ("R", "red"),
-        ("G", "green"),
-        ("W", "white"),
-        ("Y", "yellow"),
+        ("red", "red"),
+        ("green", "green"),
+        ("white", "white"),
+        ("yellow", "yellow"),
     )
 
     first_name = models.CharField("نام", max_length=50)
