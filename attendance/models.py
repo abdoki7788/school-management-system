@@ -85,8 +85,6 @@ class WeeklySchedule(models.Model):
     tuesday = models.ManyToManyField(Lesson, related_name='tuesday')
     wednesday = models.ManyToManyField(Lesson, related_name='wednesday')
 
-    def __str__(self) -> str:
-        return f"برنامه هفتگی کلاس {self.class_room}"
 
 class Class(models.Model):
     class_id = models.CharField(max_length=3, primary_key=True)
