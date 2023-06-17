@@ -45,7 +45,7 @@ class Student(models.Model):
     student_id = models.CharField("شماره شناسنامه", max_length=10, validators=[validators.student_id_validator])
     serial_code = models.CharField("کد سریال شناسنامه", max_length=6, validators=[validators.serial_code_validator])
     class_room = models.ForeignKey("Class", verbose_name="کلاس", on_delete=models.SET_NULL, null=True, blank=True, related_name="students")
-    discipline = models.CharField("سطح انظباط", max_length=6, choices=DISCIPLINE_CHOICES, default="W")
+    discipline = models.CharField("سطح انظباط", max_length=6, choices=DISCIPLINE_CHOICES, default="white")
     
     class Meta:
         verbose_name = "دانش آموز"
