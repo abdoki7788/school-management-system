@@ -1,3 +1,7 @@
 {
-    "app": "school-management-system"
+    "app": "school-management-system",
+    "disks": [{
+        "name": "sqlite",
+        "mountTo": "data"
+    }]
 }
