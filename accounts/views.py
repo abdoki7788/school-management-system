@@ -32,7 +32,14 @@ class UserViewSet(JUserViewSet):
                 return Response(serializer.data, status=201)
             else:
                 return Response(serializer.errors, status=400)
-        
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = super().get_queryset().exclude(pk=user.pk)
+        if settings.HIDE_USERS and self.action == "list" and not user.is_staff:
+            queryset = queryset.filter(pk=user.pk)
+        return queryset
+
     def get_permissions(self):
         if self.action == "create":
             self.permission_classes = settings.PERMISSIONS.user_create
